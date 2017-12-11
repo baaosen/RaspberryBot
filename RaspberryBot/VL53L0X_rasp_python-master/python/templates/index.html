@@ -1,0 +1,133 @@
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+
+<style>
+
+body {background-color: lightblue}
+h1 	{
+	color:white; 
+	text-align: center;
+	}
+
+table ,td, tr 
+		{
+		width: 30%;
+		}
+
+.container
+{
+    	margin:50px 0px 0px 600px;
+}
+
+</style>
+
+	<body>
+		
+		<h1>
+			RaspberryBot
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+		</h1>
+		<br><br>
+		
+		<!-- live stream for the raspberry pi camera-->
+		<img src="http://143.215.110.250:8081/" style="width:100%; max-width: 640px; max-height:480px; border-radius:10px"></img>
+		
+		<!-- table of arrow images-->
+		<table style="width:100%; max-width:400px; height:300px; position:fixed; top:150; left:800;">
+			
+			<tr>
+				<td>
+						<input type="image" id="Forward" name="direction" src="/static/img/uparrow" style="margin-left:110px; width:50%;">
+				</td>
+			</tr>
+			<tr>
+				<td>
+						<input type="image" id="Left" name="direction" src="/static/img/lef.png" style="margin-left:0px; width:50%;">
+				</td>
+				<td>
+						<input type="image" id="Right" name="direction" src="/static/img/right.png" style="margin-left:20px; width:50%;">
+				</td>
+			</tr>
+			<tr>
+				<td>
+						<input type="image" id="Backward" name="direction" src="/static/img/down.png" style="margin-left:110px; width:50%;">
+				</td>
+			</tr>
+		</table>
+		
+		<!-- table of sensor values from the VL53L0X TOF sensors-->
+		<div id=container style="width:100%; max-width:100px; height:100px; position:fixed; top:500; left:800;">
+			<table id="overview">
+				<tr>
+        				<th>Sensor</th>
+        				<th align="center">Distance (mm)</th>
+    				</tr>
+    				<tr>
+       				 	<td>Front</td>
+      				  	<td id="v" align="center"></td>
+    				</tr>
+    				<tr>
+      				  	<td>Left</td>
+     				   	<td id="v1" align="center"></td>
+    				</tr>
+    				<tr>
+     				   	<td>Right</td>
+     				   	<td id="v2" align="center"></td>
+    				</tr>
+    				<tr>
+     				   	<td>Back</td>
+     				   	<td id="v3" align="center"></td>
+    				</tr>
+			</table>
+		</div>
+		
+		<script>
+			
+			<!--if a arrow is clicked on, move the robot until the arrow is not being clicked on anymore-->
+			$( document ).ready(function(){
+    				$("#Backward").on("mousedown", function() {
+     					$.get('/4');
+     					}).on('mouseup', function() {
+     					$.get('/5');
+    				});
+    				$("#Forward").on("mousedown", function() {
+     					$.get('/2');
+     					}).on('mouseup', function() {
+     					$.get('/5');
+    				});
+    				$("#Left").on("mousedown", function() {
+     					$.get('/1');
+     					}).on('mouseup', function() {
+     					$.get('/5');
+    				});
+    				$("#Right").on("mousedown", function() {
+     					$.get('/3');
+     					}).on('mouseup', function() {
+     					$.get('/5');
+    				});
+			});
+
+		</script>
+
+		<script type=text/javascript>
+
+			<!-- Reads a JSON file of the TOF sensor data and prints it into a table-->
+			function sensor_values() {
+    				$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    				$.getJSON($SCRIPT_ROOT + "_func",
+            				function (data) {
+                				$('#v').text(data.variable);
+                				$('#v1').text(data.variable1);
+                				$('#v2').text(data.variable2);
+          					$('#v3').text(data.variable3);
+           				}
+    				);	
+			}
+			
+			<!-- calls the script above every 2 seconds-->
+			setInterval('sensor_values()', 2000);
+
+		</script>
+	</body>
+</html>
