@@ -1,5 +1,11 @@
 # RaspberryBot
 The RaspberryBot is a Raspberry Pi web controlled robot that transmits a live stream, GUI for motor controls, and transmits data from four Time-of-Flight (ToF) sensors to a web GUI. The robot uses an H-Bridge [TB6612FNG](https://www.sparkfun.com/products/9457) to connect the motors to the Raspberry Pi. Four ToF [VL53L0X](https://www.adafruit.com/product/3317) sensors are used to inform the user of the distance around the robot. A Raspberry Pi Camera Module transmits a live stream to a website, but you can also use an USB camera. This project also uses Flask to allow the webserver and a Python program to comunicate between each other. 
+## Pictures
+![](Robot_Web.JPG)
+
+![](Side.JPG)
+
+![](Top.JPG)
 ## Components
 - [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
 - [Raspberry Pi Camera Module V2](https://www.raspberrypi.org/products/camera-module-v2/)
